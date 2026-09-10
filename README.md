@@ -7,6 +7,81 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Deployment (Docker / Laravel Sail)
+
+This project runs via [Laravel Sail](https://laravel.com/docs/sail) (Docker Compose) so Dusk/Selenium browser scraping works without `ext-pcntl`, which Windows PHP builds don't support.
+
+> **IMPORTANT Windows note:** the `vendor/bin/sail` script don`t run on Windows (Git Bash/PowerShell) — it only supports macOS/Linux/WSL2. Use `docker compose` instead of `./vendor/bin/sail ...` for every command below.
+
+### Prerequisites
+
+- Docker Desktop running.
+
+### 1. Environment
+
+Copy `.env.example` to `.env`, then set/confirm:
+
+```
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=somplo_db
+DB_USERNAME=sail
+DB_PASSWORD=password
+
+WWWUSER=1000
+WWWGROUP=1000
+
+APP_URL=http://laravel.test
+DUSK_DRIVER_URL=http://selenium:4444/wd/hub
+
+PARSE_URL=<page to scrape>
+PARSE_IMAGE_SELECTOR=<class name of the images to collect>
+```
+
+`WWWUSER`/`WWWGROUP` are normally exported by `sail` itself (`id -u`/`id -g`); since that wrapper can't run on Windows, they're set manually here instead.
+
+### 2. Build & start the stack
+
+```bash
+docker compose build laravel.test
+docker compose up -d
+```
+
+This starts services: `laravel.test` (PHP 8.3 app), `mysql` (8.4), and `selenium` (Selenium/Chromium, used by Dusk and parser)
+
+### 3. Install dependencies & generate app key (first run only)
+
+```bash
+docker compose exec laravel.test composer install
+docker compose exec laravel.test php artisan key:generate
+```
+
+### 4. Migrate & seed the database
+
+```bash
+docker compose exec laravel.test php artisan migrate --seed
+```
+
+### 5. Verify
+
+The app is served on `http://localhost` (port 80):
+
+```bash
+curl http://localhost/api/product/get_data/1
+```
+
+### API Endpoints
+
+| Method | URI | Description |
+|---|---|---|
+| POST | `/api/product/set_data` | Create a product |
+| POST | `/api/seller/set_data` | Create a seller |
+| GET | `/api/product/get_data/{id}` | Get phone_name + seller_name where display_size > 5 |
+| POST | `/api/product/update_data_bulk` | Bulk-update cost for a list of product ids |
+| POST | `/api/bulk_insert` | Bulk-insert an array of products |
+| GET | `/api/parse` | Scrape image URLs (class from `PARSE_IMAGE_SELECTOR`) off `PARSE_URL`, capped to 8 |
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
