@@ -12,4 +12,4 @@ Route::post('/bulk_insert', [ProductController::class, 'bulkInsert']);
 
 Route::post('/seller/set_data', [SellerController::class, 'setData']);
 
-Route::get('/parse', [ParserController::class, 'parse']);
+Route::get('/utilities/parser', [ParserController::class, 'parse']);
