@@ -123,4 +123,19 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Parser Settings
+    |--------------------------------------------------------------------------
+    |
+    | Target page and CSS selector used by App\Http\Controllers\Api\ParserController
+    | to scrape image URLs. "parse_image_selector" may match <img> elements
+    | directly, or a container element that holds them.
+    |
+    */
+
+    'parse_url' => env('PARSE_URL'),
+
+    'parse_image_selector' => env('PARSE_IMAGE_SELECTOR'),
+
 ];

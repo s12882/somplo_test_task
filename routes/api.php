@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ParserController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SellerController;
 use Illuminate\Support\Facades\Route;
@@ -10,3 +11,5 @@ Route::post('/product/update_data_bulk', [ProductController::class, 'updateDataB
 Route::post('/bulk_insert', [ProductController::class, 'bulkInsert']);
 
 Route::post('/seller/set_data', [SellerController::class, 'setData']);
+
+Route::get('/parse', [ParserController::class, 'parse']);
