@@ -73,14 +73,14 @@ curl http://localhost/api/product/get_data/1
 
 ### API Endpoints
 
-| Method | URI | Description |
-|---|---|---|
-| POST | `/api/product/set_data` | Create a product |
-| POST | `/api/seller/set_data` | Create a seller |
-| GET | `/api/product/get_data/{id}` | Get phone_name + seller_name where display_size > 5 |
-| POST | `/api/product/update_data_bulk` | Bulk-update cost for a list of product ids |
-| POST | `/api/bulk_insert` | Bulk-insert an array of products |
-| GET | `/api/utilities/parser` | Scrape image URLs (class from `PARSE_IMAGE_SELECTOR`) off `PARSE_URL`, capped to 8 |
+| Method | URI                             | Description                                                                                                                 |
+|--------|---------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| POST   | `/api/product/set_data`         | Create a product                                                                                                            |
+| POST   | `/api/seller/set_data`          | Create a seller                                                                                                             |
+| GET    | `/api/product/get_data/{id}`    | Get phone_name + seller_name where display_size > 5                                                                         |
+| POST   | `/api/product/update_data_bulk` | Bulk-update cost for a list of product ids                                                                                  |
+| POST   | `/api/bulk_insert`              | Bulk-insert an array of products                                                                                            |
+| GET    | `/api/utilities/parser`         | Scrape image URLs (class from `PARSE_IMAGE_SELECTOR`) off `PARSE_URL`, capped to 8, use `force` flag to return fresh result |
 
 ## About Laravel
 
