@@ -14,10 +14,15 @@ class WebPageParserService
      * Visit the configured URL and collect image URLs from it, caching the
      * result for a app.parse_cache_ttl so every request will not run headless browser
      *
+     * @param  bool  $forceFresh  If 'true' invalidates a cache & runs a fresh parse
      * @return array<int, string>
      */
-    public function readHtml(): array
+    public function readHtml(bool $forceFresh = false): array
     {
+        if ($forceFresh) {
+            Cache::forget($this->cacheKey());
+        }
+
         return Cache::remember(
             $this->cacheKey(),
             (int) config('app.parse_cache_ttl'),
