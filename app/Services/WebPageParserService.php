@@ -5,16 +5,30 @@ namespace App\Services;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Dusk\Browser;
 
 class WebPageParserService
 {
     /**
-     * Visit the configured URL and collect image URLs from it.
+     * Visit the configured URL and collect image URLs from it, caching the
+     * result for a app.parse_cache_ttl so every request will not run headless browser
      *
      * @return array<int, string>
      */
     public function readHtml(): array
+    {
+        return Cache::remember(
+            $this->cacheKey(),
+            (int) config('app.parse_cache_ttl'),
+            $this->parseHtml(...),
+        );
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function parseHtml(): array
     {
         $driver = $this->createWebDriver();
         $browser = new Browser($driver);
@@ -30,6 +44,11 @@ class WebPageParserService
         } finally {
             $browser->quit();
         }
+    }
+
+    protected function cacheKey(): string
+    {
+        return 'parser.image_urls.'.md5((string) config('app.parse_url'));
     }
 
     /**

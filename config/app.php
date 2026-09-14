@@ -128,14 +128,17 @@ return [
     | Parser Settings
     |--------------------------------------------------------------------------
     |
-    | Target page and CSS selector used by App\Http\Controllers\Api\ParserController
+    | Target page and CSS selector used by App\Services\WebPageParserService
     | to scrape image URLs. "parse_image_selector" may match <img> elements
-    | directly, or a container element that holds them.
+    | directly, or a container element that holds them. "parse_cache_ttl" is
+    | the number of seconds a parse result is cached for.
     |
     */
 
     'parse_url' => env('PARSE_URL'),
 
     'parse_image_selector' => env('PARSE_IMAGE_SELECTOR'),
+
+    'parse_cache_ttl' => env('PARSE_CACHE_TTL', 600),
 
 ];
